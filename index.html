@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Museum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #FFD1DC;
+            --secondary-pink: #FFECF2;
+            --accent-pink: #FF9EB5;
+            --cream: #FFF8F0;
+            --white: #FFFFFF;
+            --text-color: #4A4A4A;
+            --shadow-color: rgba(255, 158, 181, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FFD1DC' stroke='%23FF9EB5' stroke-width='1'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"), auto;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--secondary-pink);
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .section {
+            min-height: 100vh;
+            width: 100%;
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        /* Passcode Section */
+        #passcode-section {
+            background-color: var(--primary-pink);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFB6C1' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .passcode-container {
+            background-color: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 15px 35px var(--shadow-color);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .passcode-container::before,
+        .passcode-container::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 50px;
+            background-color: var(--accent-pink);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .passcode-container::before {
+            top: -20px;
+            left: -50px;
+            transform: rotate(-20deg);
+        }
+
+        .passcode-container::after {
+            bottom: -20px;
+            right: -50px;
+            transform: rotate(20deg);
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: var(--accent-pink);
+            top: -15px;
+            right: -15px;
+            transform: rotate(45deg);
+            z-index: 1;
+            box-shadow: 0 5px 10px rgba(255, 158, 181, 0.3);
+        }
+
+        .ribbon::before {
+            content: '♡';
+            position: absolute;
+            color: white;
+            font-size: 1.8rem;
+            top: 60%;
+            left: 30%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-pink);
+            text-shadow: 2px 2px 4px rgba(255, 158, 181, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .passcode-display {
+            background-color: var(--cream);
+            border: 2px solid var(--accent-pink);
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-size: 2rem;
+            letter-spacing: 12px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .passcode-display.error {
+            animation: shake 0.5s;
+            border-color: #ff6b6b;
+            background-color: #ffefef;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .key {
+            background-color: var(--white);
+            border: 2px solid var(--accent-pink);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(255, 158, 181, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%);
+            pointer-events: none;
+        }
+
+        .key:hover {
+            background-color: var(--secondary-pink);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 158, 181, 0.3);
+        }
+
+        .key:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(255, 158, 181, 0.2);
+            background-color: var(--accent-pink);
+            color: white;
+        }
+
+        .key.delete {
+            grid-column: span 3;
+            border-radius: 35px;
+            background-color: var(--secondary-pink);
+            font-size: 1.2rem;
+            height: 60px;
+            margin-top: 10px;
+            color: var(--accent-pink);
+            font-weight: bold;
+        }
+
+        .key.delete:hover {
+            background-color: var(--accent-pink);
+            color: white;
+        }
+
+        .key-0 {
+            grid-column: 2;
+        }
+
+        .keypad-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .passcode-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .passcode-heart {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FF9EB5' opacity='0.3'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: float-heart 6s linear infinite;
+        }
+
+        @keyframes float-heart {
+            0% { transform: translateY(100%) scale(0.5); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100%) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Entrance Room */
+        #entrance-section {
+            background-color: var(--secondary-pink);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .entrance-container {
+            max-width: 800px;
+            width: 90%;
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            position: relative;
+        }
+
+        .entrance-container::before,
+        .entrance-container::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--accent-pink) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .entrance-container::before {
+            top: -30px;
+            left: 10%;
+        }
+
+        .entrance-container::after {
+            bottom: -30px;
+            right: 10%;
+        }
+
+        .floating-ribbon {
+            position: absolute;
+            width: 40px;
+            height: 15px;
+            background-color: var(--accent-pink);
+            border-radius: 5px;
+            opacity: 0.8;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .floating-ribbon::before,
+        .floating-ribbon::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: var(--accent-pink);
+            border-radius: 50%;
+        }
+
+        .floating-ribbon::before {
+            left: -7px;
+        }
+
+        .floating-ribbon::after {
+            right: -7px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+        }
+
+        .entrance-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--accent-pink);
+            text-shadow: 2px 2px 4px rgba(255, 158, 181, 0.3);
+            position: relative;
+        }
+
+        .entrance-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background-color: var(--accent-pink);
+            border-radius: 3px;
+        }
+
+        .entrance-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .spinner-heart {
+            width: 80px;
+            height: 80px;
+            margin: 2rem auto;
+            position: relative;
+            animation: spin 4s infinite linear;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .spinner-heart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .enter-button {
+            background-color: var(--accent-pink);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 158, 181, 0.4);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        .enter-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 158, 181, 0.5);
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(255, 158, 181, 0.3);
+        }
+
+        .nav-button {
+            background-color: var(--white);
+            border: 2px solid var(--accent-pink);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--accent-pink);
+            font-size: 1.2rem;
+        }
+
+        .nav-button:hover {
+            background-color: var(--accent-pink);
+            color: white;
+        }
+
+        .nav-button.active {
+            background-color: var(--accent-pink);
+            color: white;
+        }
+
+        /* Audio Control */
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: var(--white);
+            border: 2px solid var(--accent-pink);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 158, 181, 0.3);
+        }
+
+        /* Music Player Notification */
+        .music-player {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .music-player.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .music-player-album {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .music-player-album img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .music-player-info {
+            flex: 1;
+        }
+
+        .music-player-title {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-player-artist {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .music-player-progress {
+            height: 4px;
+            background-color: #eee;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .music-player-progress-bar {
+            height: 100%;
+            background-color: var(--accent-pink);
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .music-player-controls {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .music-player-control {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent-pink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 5px rgba(255, 158, 181, 0.3);
+        }
+
+        /* Gallery Section */
+        #gallery-section {
+            background-color: var(--cream);
+            padding: 4rem 2rem;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-pink);
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(255, 158, 181, 0.3);
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(255, 158, 181, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: rotate(var(--rotation));
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) rotate(0deg);
+            box-shadow: 0 15px 30px rgba(255, 158, 181, 0.3);
+            z-index: 10;
+        }
+
+        .gallery-frame {
+            padding: 15px;
+            background-color: var(--white);
+            border: 5px solid var(--accent-pink);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .gallery-frame::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 20px;
+            background-color: var(--accent-pink);
+            border-radius: 5px;
+            z-index: -1;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            background-color: var(--secondary-pink);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-image svg {
+            width: 50%;
+            height: 50%;
+            opacity: 0.7;
+        }
+
+        .gallery-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%);
+            pointer-events: none;
+        }
+
+        .gallery-caption {
+            padding: 15px 10px;
+            text-align: center;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .gallery-date {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: var(--accent-pink);
+        }
+
+        .gallery-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 80%;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .modal-caption {
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Video Section */
+        #video-section {
+            background-color: #1a1a1a;
+            padding: 4rem 2rem;
+            color: var(--white);
+        }
+
+        .cinema-container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cinema-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-pink);
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .cinema-screen {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .cinema-curtain-left,
+        .cinema-curtain-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: var(--accent-pink);
+            z-index: 2;
+            transition: transform 1.5s ease;
+        }
+
+        .cinema-curtain-left {
+            left: 0;
+            transform-origin: left;
+        }
+
+        .cinema-curtain-right {
+            right: 0;
+            transform-origin: right;
+        }
+
+        .cinema-screen.open .cinema-curtain-left {
+            transform: translateX(-100%);
+        }
+
+        .cinema-screen.open .cinema-curtain-right {
+            transform: translateX(100%);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .play-button {
+            background-color: var(--accent-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .cinema-seats {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            perspective: 300px;
+        }
+
+        .cinema-seat {
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-pink);
+            margin: 0 5px;
+            border-radius: 5px 5px 0 0;
+            transform: rotateX(20deg);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Letter Section */
+        #letter-section {
+            background-color: var(--secondary-pink);
+            padding: 4rem 2rem;
+        }
+
+        .letter-container {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            background-color: var(--cream);
+            border-radius: 10px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFD1DC' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .letter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-pink);
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(255, 158, 181, 0.3);
+        }
+
+        .letter-date {
+            text-align: right;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .letter-content {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .letter-content .highlight {
+            color: var(--accent-pink);
+            font-weight: bold;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .letter-content .highlight:hover::after {
+            content: '♡';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--accent-pink);
+            animation: float-up 1.5s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% { opacity: 1; top: -20px; }
+            100% { opacity: 0; top: -50px; }
+        }
+
+        .letter-signature {
+            margin-top: 3rem;
+            text-align: right;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        /* Final Section */
+        #final-section {
+            background-color: var(--primary-pink);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .final-container {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-pink);
+            text-shadow: 2px 2px 4px rgba(255, 158, 181, 0.3);
+        }
+
+        .final-quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin: 2rem 0;
+            position: relative;
+            display: inline-block;
+        }
+
+        .final-quote::before,
+        .final-quote::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FF9EB5'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.5;
+        }
+
+        .final-quote::before {
+            top: -20px;
+            left: -30px;
+        }
+
+        .final-quote::after {
+            bottom: -20px;
+            right: -30px;
+            transform: rotate(180deg);
+        }
+
+        .download-button {
+            background-color: var(--accent-pink);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 158, 181, 0.4);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .download-button:hover::before {
+            left: 100%;
+        }
+
+        .download-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 158, 181, 0.5);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FF9EB5' opacity='0.7'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: float-heart 10s linear infinite;
+            opacity: 0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .entrance-title, .gallery-title, .letter-title, .final-title, .cinema-title {
+                font-size: 2rem;
+            }
+
+            .keypad {
+                gap: 10px;
+            }
+
+            .key {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .letter-container, .final-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .navigation {
+                gap: 10px;
+            }
+
+            .nav-button {
+                width: 35px;
+                height: 35px;
+            }
+
+            .music-player {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .passcode-container, .entrance-container, .letter-container, .final-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .key {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .letter-content {
+                font-size: 1rem;
+            }
+
+            .final-quote {
+                font-size: 1.2rem;
+            }
+
+            .navigation {
+                padding: 8px 15px;
+            }
+
+            .nav-button {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+            .music-player {
+                width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Passcode Section -->
+    <section id="passcode-section" class="section active">
+        <div class="passcode-container">
+            <div class="ribbon"></div>
+            <h1>Birthday Surprise</h1>
+            <p>Knock, knock… Only the right heart can open this birthday surprise 💗</p>
+            <div class="passcode-display" id="passcode-display"></div>
+            <div class="keypad">
+                <div class="key" data-value="1">1</div>
+                <div class="key" data-value="2">2</div>
+                <div class="key" data-value="3">3</div>
+                <div class="key" data-value="4">4</div>
+                <div class="key" data-value="5">5</div>
+                <div class="key" data-value="6">6</div>
+                <div class="key" data-value="7">7</div>
+                <div class="key" data-value="8">8</div>
+                <div class="key" data-value="9">9</div>
+                <div class="key key-0" data-value="0">0</div>
+                <div class="key delete" data-value="delete">Clear</div>
+            </div>
+            <div class="passcode-hearts" id="passcode-hearts"></div>
+        </div>
+    </section>
+
+    <!-- Entrance Section -->
+    <section id="entrance-section" class="section">
+        <div class="entrance-container">
+            <div class="floating-ribbon" style="top: 20%; left: 10%;"></div>
+            <div class="floating-ribbon" style="top: 40%; right: 15%;"></div>
+            <div class="floating-ribbon" style="bottom: 30%; left: 20%;"></div>
+            <h1 class="entrance-title">Our Love, Framed Forever</h1>
+            <p class="entrance-subtitle">A journey through our most precious moments...</p>
+            <div class="spinner-heart">
+                <svg viewBox="0 0 24 24" fill="#FF9EB5">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <p>Welcome to your birthday surprise, my love!</p>
+            <button class="enter-button" id="enter-gallery">Enter Our Museum of Love</button>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery-section" class="section">
+        <h1 class="gallery-title">Our Memory Gallery</h1>
+        <div class="gallery-container" id="gallery-container">
+            <!-- Gallery items will be generated dynamically -->
+        </div>
+    </section>
+
+    <!-- Gallery Modal -->
+    <div class="gallery-modal" id="gallery-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-image-container">
+                <img class="modal-image" src="" alt="Memory">
+            </div>
+            <p class="modal-caption"></p>
+        </div>
+    </div>
+
+    <!-- Video Section -->
+    <section id="video-section" class="section">
+        <div class="cinema-container">
+            <h1 class="cinema-title">Our Special Moments</h1>
+            <div class="cinema-screen">
+                <div class="cinema-curtain-left"></div>
+                <div class="cinema-curtain-right"></div>
+                <div class="video-container" id="video-container">
+                    <div class="video-placeholder">
+                        <button class="play-button" id="play-button">▶</button>
+                        <p style="margin-top: 20px;">Click to watch our special video</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cinema-seats">
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+                <div class="cinema-seat"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Letter Section -->
+    <section id="letter-section" class="section">
+    <div class="letter-container">
+        <h1 class="letter-title">My Birthday Letter to You</h1>
+        <div class="letter-date">July 21, 2025</div>
+        <div class="letter-content">
+        Hi love,<br><br>
+
+        <span class="highlight">Happy birthday.</span><br><br>
+
+        I know I say that every year, pero this one feels different. You're 20 now. That’s not just any birthday. You're not a teenager anymore. You’re stepping into real adulthood, and I just want to talk to you. Not just as your girlfriend, but as someone who’s seen your ugali, your struggles, your growth, and everything in between.<br><br>
+
+        We've been through so much. Sobrang dami na nating pinag-awayan. Ang daming nasabi, ang daming nasaktan, ang daming napagod. But despite all of that, <span class="highlight">I’m still here. Still choosing you.</span> Kahit ang hirap minsan. I know we’re not the sweet type of couple. We don’t do too much pa-cute or romantic stuff. But this is me being real with you.<br><br>
+
+        You’re not perfect. Alam mo na 'yan. You’ve made mistakes. You’ve hurt me in ways I didn’t expect from someone I trusted that much. Pero even with all that, <span class="highlight">I still see the parts of you that matter.</span> Yung side mo na tahimik pero sincere. Yung effort mo kahit hindi laging obvious. Yung struggle mong baguhin sarili mo kahit hindi ko hinihingi. I see those. I notice them. And I hold on to them.<br><br>
+
+        Sometimes it hurts how you pull away when I need you the most. How you shut down instead of letting me in. Pero maybe that’s your way of protecting yourself. And maybe that’s why I never gave up. Kasi I know what it feels like to protect yourself from pain. That’s how I know. <span class="highlight">Mahal kita.</span> Not because you're always good to me, but because I still choose you kahit masakit. That’s real love, right?<br><br>
+
+        But love is not just about holding on. I’ve realized something lately. <span class="highlight">The true meaning of love is also learning to love yourself.</span> And that’s what I want for you. I want you to stop looking for love in things or people that break you. You keep trying to be okay for everyone else, but I hope one day you’ll do it for yourself too. Because <span class="highlight">you deserve peace. You deserve healing.</span> And that starts with you.<br><br>
+
+        Thank you for trying. Thank you for staying with me even when we were both tired. Thank you for the small things I don’t always notice. And sorry. Sorry for the days I was cold. Sorry for the times I didn’t understand where you were coming from. I know I have a strong personality, and I know it gets too much sometimes. But please know that <span class="highlight">everything I say, every time I fight for you, it’s because I care.</span> I really do.<br><br>
+
+        <span class="highlight">My wish for you today is peace of mind. Real joy. A love that makes you feel safe—not just from me, but from yourself.</span> I hope you find comfort in your own presence. I hope you learn to let go of things that drain you. And I hope you start believing that you are enough, even without needing to prove anything to anyone.<br><br>
+
+        The song I dedicate to you is <i>Those Eyes</i>. Because every time I look at you, especially during the quiet moments, I still see the boy I fell in love with. The boy who hides so much pain but still smiles. The boy who still tries. And I wish, even just once, you could see yourself the way I see you.<br><br>
+
+        Here’s a verse I want to leave you with:<br><br>
+
+        <div style="text-align: center; padding: 12px; border-left: 4px solid #eab1c7; background-color: #fff0f5;">
+            <b>Ecclesiastes 3:11</b><br>
+            <i>“He has made everything beautiful in its time.”</i>
+        </div><br>
+
+        Maybe this season is not perfect. Maybe we are not perfect. But <span class="highlight">we are growing.</span> And that’s enough for now.<br><br>
+
+        <span class="highlight">I love you. I always will.</span><br>
+        Please don’t forget to love yourself too.
+        </div>
+        <div class="letter-signature">
+        Yurie
+        </div>
+    </div>
+    </section>
+
+    <!-- Final Section -->
+    <section id="final-section" class="section">
+        <div class="floating-hearts" id="floating-hearts"></div>
+        <div class="final-container">
+            <h1 class="final-title">Happy 20th Birthday, Love</h1>
+            <div class="final-quote">
+                "You’ve made it this far. Keep growing, keep healing."
+            </div>
+            <p>I’m proud of you. I’m grateful for you. And I’m staying—through every season, every version of you.</p>
+            <button class="download-button" id="download-button">Download Our Memories</button>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="navigation" id="navigation" style="display: none;">
+        <div class="nav-button" data-section="entrance-section">1</div>
+        <div class="nav-button" data-section="gallery-section">2</div>
+        <div class="nav-button" data-section="video-section">3</div>
+        <div class="nav-button" data-section="letter-section">4</div>
+        <div class="nav-button" data-section="final-section">5</div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="background-audio" src="those_eyes.mp3" preload="auto"></audio>
+
+    <!-- Audio Control -->
+    <div class="audio-control" id="audio-control" style="display: none;">
+        <svg id="audio-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF9EB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path id="audio-wave-1" d="M15.54 8.46a5 5 0 0 1 0 7.07" style="display: none;"></path>
+            <path id="audio-wave-2" d="M19.07 4.93a10 10 0 0 1 0 14.14" style="display: none;"></path>
+        </svg>
+    </div>
+
+    <!-- Music Player Notification -->
+    <div class="music-player" id="music-player">
+        <div class="music-player-album">
+            <img id="music-album-art" src="image/album.jpg" alt="Album Art">
+        </div>
+        <div class="music-player-info">
+            <div class="music-player-title" id="music-title">Those Eyes</div>
+            <div class="music-player-artist" id="music-artist">New West</div>
+            <div class="music-player-progress">
+                <div class="music-player-progress-bar" id="music-progress"></div>
+            </div>
+        </div>
+        <div class="music-player-controls">
+            <div class="music-player-control" id="music-control">
+                <span id="music-control-icon">▶</span>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables
+            const correctPasscode = '0721'; 
+            let currentPasscode = '';
+            let currentSection = 'passcode-section';
+           
+            // DOM Elements
+            const passcodeDisplay = document.getElementById('passcode-display');
+            const keys = document.querySelectorAll('.key');
+            const sections = document.querySelectorAll('.section');
+            const navigation = document.getElementById('navigation');
+            const navButtons = document.querySelectorAll('.nav-button');
+            const enterGalleryButton = document.getElementById('enter-gallery');
+            const audioControl = document.getElementById('audio-control');
+            const audioIcon = document.getElementById('audio-icon');
+            const audioWave1 = document.getElementById('audio-wave-1');
+            const audioWave2 = document.getElementById('audio-wave-2');
+            const galleryContainer = document.getElementById('gallery-container');
+            const galleryModal = document.getElementById('gallery-modal');
+            const modalClose = document.querySelector('.modal-close');
+            const modalCaption = document.querySelector('.modal-caption');
+            const modalImage = document.querySelector('.modal-image');
+            const cinemaScreen = document.querySelector('.cinema-screen');
+            const playButton = document.getElementById('play-button');
+            const videoContainer = document.getElementById('video-container');
+            const downloadButton = document.getElementById('download-button');
+            const floatingHearts = document.getElementById('floating-hearts');
+            const passcodeHearts = document.getElementById('passcode-hearts');
+            const audio = document.getElementById('background-audio');
+
+            // Music player elements
+            const musicPlayer = document.getElementById('music-player');
+            const musicTitle = document.getElementById('music-title');
+            const musicArtist = document.getElementById('music-artist');
+            const musicAlbumArt = document.getElementById('music-album-art');
+            const musicProgress = document.getElementById('music-progress');
+            const musicControl = document.getElementById('music-control');
+            const musicControlIcon = document.getElementById('music-control-icon');
+
+            const galleryItems = [
+                { caption: "That calm day by the sea with you", image: "image/beach.jpg" },
+                { caption: "A quiet night at the Quad, just us", image: "image/night.jpg" },
+                { caption: "Your hug that stayed with me", image: "image/hug.jpg" },
+                { caption: "Our first jog, side by side", image: "image/jog.jpg" },
+                { caption: "Our little portrait, drawn in the sand", image: "image/drawing.jpg" },
+                { caption: "That day we planned our future", image: "image/career.jpg" },
+                { caption: "That soft kiss I still think about", image: "image/gentle.jpg" },
+                { caption: "Where we always ended up together", image: "image/shadow.jpg" },
+                { caption: "One Christmas, one family, one us", image: "image/christmas.jpg" },
+                { caption: "The first slow dance, hand in hand", image: "image/white.jpg" },
+                { caption: "Where I always found you waiting", image: "image/place.jpg" },
+                { caption: "The boy who grew into my person", image: "image/21st.jpg" } 
+            ];
+
+            // Initialize
+            initializePasscode();
+            createGalleryItems();
+            createFloatingHearts();
+            createPasscodeHearts();
+
+            // Passcode Functions
+            function initializePasscode() {
+                keys.forEach(key => {
+                    key.addEventListener('click', function() {
+                        const value = this.getAttribute('data-value');
+                        
+                        // Add key press animation
+                        this.classList.add('active');
+                        setTimeout(() => {
+                            this.classList.remove('active');
+                        }, 200);
+                        
+                        if (value === 'delete') {
+                            currentPasscode = '';
+                            updatePasscodeDisplay();
+                        } else {
+                            if (currentPasscode.length < 4) {
+                                currentPasscode += value;
+                                updatePasscodeDisplay();
+                                
+                                // Create heart animation on key press
+                                createHeartOnKeyPress(this);
+                                
+                                if (currentPasscode.length === 4) {
+                                    checkPasscode();
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            function updatePasscodeDisplay() {
+                passcodeDisplay.textContent = currentPasscode.replace(/./g, '•');
+            }
+
+            function checkPasscode() {
+                if (currentPasscode === correctPasscode) {
+                    passcodeDisplay.style.color = '#4CAF50';
+                    passcodeDisplay.style.borderColor = '#4CAF50';
+                    
+                    // Success animation
+                    createHeartBurst();
+                    
+                    setTimeout(() => {
+                        switchSection('entrance-section');
+                        navigation.style.display = 'flex';
+                        audioControl.style.display = 'flex';
+                        initAudio();
+                    }, 1000);
+                } else {
+                    passcodeDisplay.classList.add('error');
+                    setTimeout(() => {
+                        passcodeDisplay.classList.remove('error');
+                        currentPasscode = '';
+                        updatePasscodeDisplay();
+                    }, 500);
+                }
+            }
+
+            function createHeartOnKeyPress(keyElement) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '♡';
+                heart.style.position = 'absolute';
+                heart.style.color = 'var(--accent-pink)';
+                heart.style.fontSize = '24px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '10';
+                
+                // Position at the key
+                const rect = keyElement.getBoundingClientRect();
+                heart.style.left = `${rect.left + rect.width/2}px`;
+                heart.style.top = `${rect.top + rect.height/2}px`;
+                heart.style.transform = 'translate(-50%, -50%)';
+                
+                document.body.appendChild(heart);
+                
+                // Animate
+                heart.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: 'translate(-50%, -150%) scale(1.5)', opacity: 0 }
+                ], {
+                    duration: 700,
+                    easing: 'ease-out'
+                });
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 700);
+            }
+
+            // Navigation Functions
+            enterGalleryButton.addEventListener('click', function() {
+                switchSection('gallery-section');
+            });
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    switchSection(sectionId);
+                });
+            });
+
+            function switchSection(sectionId) {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+                currentSection = sectionId;
+                
+                updateNavigation();
+                
+                if (sectionId === 'video-section') {
+                    setTimeout(() => {
+                        cinemaScreen.classList.add('open');
+                    }, 500);
+                } else {
+                    cinemaScreen.classList.remove('open');
+                }
+            }
+
+            function updateNavigation() {
+                navButtons.forEach(button => {
+                    const buttonSection = button.getAttribute('data-section');
+                    if (buttonSection === currentSection) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
+
+            // Audio Functions
+            let audioPlaying = false;
+            let musicProgressInterval;
+
+            function initAudio() {
+                audioControl.addEventListener('click', toggleAudio);
+                musicControl.addEventListener('click', toggleAudio);
+
+                // Reset UI when audio ends
+                audio.addEventListener('ended', () => {
+                    audioPlaying = false;
+                    audioWave1.style.display = 'none';
+                    audioWave2.style.display = 'none';
+                    musicPlayer.classList.remove('active');
+                    musicControlIcon.textContent = '▶';
+                    musicProgress.style.width = '0%';
+                    clearInterval(musicProgressInterval);
+                });
+
+                // Update progress bar as audio plays
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const percent = (audio.currentTime / audio.duration) * 100;
+                        musicProgress.style.width = `${percent}%`;
+                    }
+                });
+            }
+
+            function toggleAudio() {
+                if (audioPlaying) {
+                    audio.pause();
+                    audioPlaying = false;
+                    audioWave1.style.display = 'none';
+                    audioWave2.style.display = 'none';
+                    musicPlayer.classList.add('active');
+                    musicControlIcon.textContent = '▶';
+                    clearInterval(musicProgressInterval);
+                    setTimeout(() => {
+                        musicPlayer.classList.remove('active');
+                    }, 2000);
+                } else {
+                    audio.play().catch((e) => {
+                        alert('Audio playback was blocked by your browser. Please interact with the page first.');
+                        return;
+                    });
+                    audioPlaying = true;
+                    audioWave1.style.display = 'block';
+                    audioWave2.style.display = 'block';
+                    musicPlayer.classList.add('active');
+                    musicControlIcon.textContent = '❚❚';
+                    clearInterval(musicProgressInterval);
+                    musicProgressInterval = setInterval(() => {
+                        if (audio.duration) {
+                            const percent = (audio.currentTime / audio.duration) * 100;
+                            musicProgress.style.width = `${percent}%`;
+                        }
+                    }, 500);
+                    setTimeout(() => {
+                        if (audioPlaying) {
+                            musicPlayer.classList.remove('active');
+                        }
+                    }, 5000);
+                }
+            }
+
+            // Gallery Functions
+            function createGalleryItems() {
+                galleryContainer.innerHTML = '';
+                galleryItems.forEach((item, index) => {
+                    const rotation = Math.random() * 10 - 5; // Random rotation between -5 and 5 degrees
+
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.style.setProperty('--rotation', `${rotation}deg`);
+
+                    let imageContent;
+                    if (item.image) {
+                        imageContent = `<img src="${item.image}" alt="${item.caption}">`;
+                    } else {
+                        imageContent = `
+                            <svg viewBox="0 0 24 24" fill="#FF9EB5">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                                2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 
+                                2.09C13.09 3.81 14.76 3 16.5 3 
+                                19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+                                6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        `;
+                    }
+
+                    galleryItem.innerHTML = `
+                        <div class="gallery-frame">
+                            <div class="gallery-image">
+                                ${imageContent}
+                            </div>
+                            <div class="gallery-caption">${item.caption}</div>
+                        </div>
+                    `;
+
+                    galleryItem.addEventListener('click', () => {
+                        openGalleryModal(item);
+                    });
+
+                    galleryContainer.appendChild(galleryItem);
+                });
+            }
+
+            function openGalleryModal(item) {
+                if (item.image) {
+                    modalImage.src = item.image;
+                } else {
+                    modalImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FF9EB5'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E";
+                }
+                modalCaption.textContent = item.caption;
+                galleryModal.classList.add('active');
+            }
+
+            modalClose.addEventListener('click', () => {
+                galleryModal.classList.remove('active');
+            });
+
+           // Video Functions (uses your own video named "video.mp4")
+            playButton.addEventListener('click', function() {
+                const videoPlaceholder = document.querySelector('.video-placeholder');
+                videoPlaceholder.innerHTML = `
+                    <video controls autoplay style="width: 100%; height: 100%; object-fit: cover; background-color: #000;">
+                        <source src="document.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+            });
+
+            // Letter Functions
+            const highlightWords = document.querySelectorAll('.highlight');
+            highlightWords.forEach(word => {
+                word.addEventListener('click', function() {
+                    const heart = document.createElement('span');
+                    heart.textContent = '♡';
+                    heart.style.position = 'absolute';
+                    heart.style.color = 'var(--accent-pink)';
+                    heart.style.top = '-20px';
+                    heart.style.left = '50%';
+                    heart.style.transform = 'translateX(-50%)';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.animation = 'float-up 1.5s forwards';
+                    
+                    this.style.position = 'relative';
+                    this.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 1500);
+                });
+            });
+
+            // Download Function
+            downloadButton.addEventListener('click', function() {
+                // Create a simple PDF-like object with memories
+                const memories = {
+                    title: "Our Love Museum",
+                    date: new Date().toLocaleDateString(),
+                    gallery: galleryItems.map(item => ({
+                        caption: item.caption,
+                        date: item.date
+                    })),
+                    letter: document.querySelector('.letter-content').textContent
+                };
+                
+                // Convert to string for download
+                const memoryString = JSON.stringify(memories, null, 2);
+                const blob = new Blob([memoryString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Create download link
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'our-memories.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Show hearts animation
+                createHeartBurst();
+            });
+
+            // Floating Hearts
+            function createFloatingHearts() {
+                for (let i = 0; i < 15; i++) {
+                    createFloatingHeart();
+                }
+            }
+
+            function createFloatingHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                
+                // Random position
+                const left = Math.random() * 100;
+                heart.style.left = `${left}%`;
+                
+                // Random delay
+                const delay = Math.random() * 10;
+                heart.style.animationDelay = `${delay}s`;
+                
+                // Random size
+                const size = Math.random() * 15 + 10;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                
+                floatingHearts.appendChild(heart);
+                
+                // Remove and recreate after animation ends
+                setTimeout(() => {
+                    heart.remove();
+                    createFloatingHeart();
+                }, 10000 + delay * 1000);
+            }
+
+            // Create floating hearts in passcode section
+            function createPasscodeHearts() {
+                for (let i = 0; i < 8; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'passcode-heart';
+                    
+                    // Random position
+                    const left = Math.random() * 100;
+                    heart.style.left = `${left}%`;
+                    
+                    // Random delay
+                    const delay = Math.random() * 6;
+                    heart.style.animationDelay = `${delay}s`;
+                    
+                    // Random size
+                    const size = Math.random() * 12 + 8;
+                    heart.style.width = `${size}px`;
+                    heart.style.height = `${size}px`;
+                    
+                    passcodeHearts.appendChild(heart);
+                    
+                    // Remove and recreate after animation ends
+                    setTimeout(() => {
+                        heart.remove();
+                        createPasscodeHeart();
+                    }, 6000 + delay * 1000);
+                }
+            }
+
+            function createPasscodeHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'passcode-heart';
+                
+                // Random position
+                const left = Math.random() * 100;
+                heart.style.left = `${left}%`;
+                
+                // Random delay
+                const delay = Math.random() * 6;
+                heart.style.animationDelay = `${delay}s`;
+                
+                // Random size
+                const size = Math.random() * 12 + 8;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                
+                passcodeHearts.appendChild(heart);
+                
+                // Remove and recreate after animation ends
+                setTimeout(() => {
+                    heart.remove();
+                    createPasscodeHeart();
+                }, 6000);
+            }
+
+            function createHeartBurst() {
+                for (let i = 0; i < 30; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    
+                    // Center position
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    
+                    // Random direction
+                    const angle = Math.random() * 360;
+                    const distance = Math.random() * 100 + 50;
+                    heart.style.transform = `translate(-50%, -50%)`;
+                    
+                    // Custom animation
+                    heart.style.animation = 'none';
+                    heart.style.opacity = '1';
+                    
+                    floatingHearts.appendChild(heart);
+                    
+                    // Animate outward
+                    setTimeout(() => {
+                        heart.style.transition = 'all 1.5s ease-out';
+                        heart.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(${Math.random() + 0.5})`;
+                        heart.style.opacity = '0';
+                    }, 10);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 1500);
+                }
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (currentSection !== 'passcode-section') {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        navigateNext();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        navigatePrevious();
+                    }
+                } else {
+                    // Handle number keys for passcode
+                    if (e.key >= '0' && e.key <= '9') {
+                        const keyElement = document.querySelector(`.key[data-value="${e.key}"]`);
+                        if (keyElement) {
+                            keyElement.click();
+                        }
+                    } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                        const deleteKey = document.querySelector('.key.delete');
+                        if (deleteKey) {
+                            deleteKey.click();
+                        }
+                    }
+                }
+            });
+
+            function navigateNext() {
+                const sections = ['entrance-section', 'gallery-section', 'video-section', 'letter-section', 'final-section'];
+                const currentIndex = sections.indexOf(currentSection);
+                if (currentIndex < sections.length - 1) {
+                    switchSection(sections[currentIndex + 1]);
+                }
+            }
+
+            function navigatePrevious() {
+                const sections = ['entrance-section', 'gallery-section', 'video-section', 'letter-section', 'final-section'];
+                const currentIndex = sections.indexOf(currentSection);
+                if (currentIndex > 0) {
+                    switchSection(sections[currentIndex - 1]);
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96213963955e7a47',t:'MTc1MzAwMTU2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
